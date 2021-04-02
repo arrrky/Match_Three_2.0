@@ -7,5 +7,4 @@ public class Tile : MonoBehaviour
 {
    public TileType tileType;
 
-   //TODO - нужен ли этот класс?
 }

@@ -2,14 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 using Random = UnityEngine.Random;
 
 public class TileSpawner : MonoBehaviour
 {
-   [SerializeField] private TileFactory tileFactory;
-
+   private TileFactory tileFactory;
    private Array tileTypeEnumValues;
 
+   [Inject]
+   private void Construct(TileFactory tileFactory)
+   {
+      this.tileFactory = tileFactory;
+   }
+   
    private void Awake()
    {
       tileTypeEnumValues = Enum.GetValues(typeof(TileType));
@@ -36,9 +42,9 @@ public class TileSpawner : MonoBehaviour
       Instantiate(tile, gameObject.transform);
    }
 
-   private TileType GetRandomTypeOfTile()
+   public TileType GetRandomTypeOfTile()
    {
-      TileType randomTileType = (TileType)tileTypeEnumValues.GetValue(Random.Range(0, tileTypeEnumValues.Length));
+      TileType randomTileType = (TileType)tileTypeEnumValues.GetValue(Random.Range(1, tileTypeEnumValues.Length));
       return randomTileType;
    }
 }

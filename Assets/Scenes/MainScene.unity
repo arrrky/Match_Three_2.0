@@ -356,3 +356,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileSpawnerPrefab: {fileID: 8571126817894681497, guid: 7702d9cf0e53d3345b5206cc0be41278,
     type: 3}
+  tileFactoryPrefab: {fileID: 2984722694421947866, guid: d3c23263682864046a0d6b9d478227f4,
+    type: 3}
+  playingFieldManagerPrefab: {fileID: 8502499644409746096, guid: b2b4bd24633d283429f38d2b3f9d173f,
+    type: 3}
