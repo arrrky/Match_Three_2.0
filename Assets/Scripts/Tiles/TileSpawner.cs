@@ -21,15 +21,6 @@ public class TileSpawner : MonoBehaviour
       tileTypeEnumValues = Enum.GetValues(typeof(TileType));
    }
 
-   // TODO - убрать, нужно для тестов
-   private void Update()
-   {
-      if (Input.GetKeyDown(KeyCode.S))
-      {
-         SpawnRandomTile();
-      }
-   }
-
    private void SpawnTile(TileType tileType)
    {
       GameObject tile = tileFactory.GetTileGameObject(tileType);

@@ -15,8 +15,7 @@ public class MiscTools
         Vector3 screenVector = new Vector3(Screen.width, Screen.height, mainCamera.transform.position.z);
         return mainCamera.ScreenToWorldPoint(screenVector);
     }
-    
-    
+
     /// <summary>
     /// Узнаем расстояние смещения для того, чтобы префаб со спрайтом, который мы инстанируем, не вылезал за сцену
     /// </summary>

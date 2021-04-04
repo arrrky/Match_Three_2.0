@@ -7,7 +7,6 @@ public class MainSceneInstaller : MonoInstaller
     [SerializeField] private GameObject tileSpawnerPrefab;
     [SerializeField] private GameObject tileFactoryPrefab;
     [SerializeField] private GameObject playingFieldManagerPrefab;
-    
 
     public override void InstallBindings()
     {
