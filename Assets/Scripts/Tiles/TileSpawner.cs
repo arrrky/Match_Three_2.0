@@ -8,7 +8,6 @@ using Random = UnityEngine.Random;
 public class TileSpawner : MonoBehaviour
 {
    private TileFactory tileFactory;
-   private Array tileTypeEnumValues;
 
    [Inject]
    private void Construct(TileFactory tileFactory)
@@ -18,7 +17,6 @@ public class TileSpawner : MonoBehaviour
    
    private void Awake()
    {
-      tileTypeEnumValues = Enum.GetValues(typeof(TileType));
    }
 
    private void SpawnTile(TileType tileType)
@@ -29,13 +27,7 @@ public class TileSpawner : MonoBehaviour
 
    private void SpawnRandomTile()
    {
-      GameObject tile = tileFactory.GetTileGameObject(GetRandomTypeOfTile());
+      GameObject tile = tileFactory.GetTileGameObject(MiscTools.GetRandomTypeOfTile());
       Instantiate(tile, gameObject.transform);
-   }
-
-   public TileType GetRandomTypeOfTile()
-   {
-      TileType randomTileType = (TileType)tileTypeEnumValues.GetValue(Random.Range(1, tileTypeEnumValues.Length));
-      return randomTileType;
    }
 }

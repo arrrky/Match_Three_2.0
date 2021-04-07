@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -23,6 +25,8 @@ public class PlayingFieldManager : MonoBehaviour
     private float distanceBetweenTiles;
 
     private Tile[,] playingField;
+
+    private const float TimeBetweenRandomSwaps = 0.01f;
 
     [Inject]
     private void Construct(TileFactory tileFactory, TileSpawner tileSpawner)
@@ -48,6 +52,9 @@ public class PlayingFieldManager : MonoBehaviour
 
     private void FillPlayingField()
     {
+        IPlayingFieldGenerator playingFieldGenerator = new PlayingFieldGenerator(rowsCount,columnsCount);
+        TileType[,] randomPlayingField = playingFieldGenerator.GetRandomPlayingField();
+        
         Vector3 pointToInstantiateTile =
             new Vector3(topLeftPointOfPlayingField.x, topLeftPointOfPlayingField.y - spriteShift.y, 0);
 
@@ -55,11 +62,16 @@ public class PlayingFieldManager : MonoBehaviour
         {
             for (int columnNumber = 0; columnNumber < columnsCount; columnNumber++)
             {
-                GameObject tile = tileFactory.GetTileGameObject(tileSpawner.GetRandomTypeOfTile());
+                TileType randomTileType = randomPlayingField[rowNumber, columnNumber];
+                GameObject tile = tileFactory.GetTileGameObject(randomTileType);
 
                 playingField[rowNumber, columnNumber] =
                     Instantiate(tile, pointToInstantiateTile, quaternion.identity, gameObject.transform)
                         .GetComponent<Tile>();
+                
+                playingField[rowNumber, columnNumber].tileIndex = new Vector2Int(rowNumber, columnNumber);
+                playingField[rowNumber, columnNumber].tileType = randomTileType;
+                
                 pointToInstantiateTile.x += distanceBetweenTiles;
             }
 
@@ -84,6 +96,30 @@ public class PlayingFieldManager : MonoBehaviour
         {
             SwapRandomTiles();
         }
+
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            StartCoroutine(SwapRandomTilesRoutine());
+
+            foreach (var tile in playingField)
+            {
+                Destroy(tile.gameObject);
+            }
+            
+            FillPlayingField();
+        }
+    }
+
+    private IEnumerator SwapRandomTilesRoutine()
+    {
+        float randomSwappingTime = 2f;
+
+        do
+        {
+            SwapRandomTiles();
+            randomSwappingTime -= TimeBetweenRandomSwaps;
+            yield return new WaitForSeconds(TimeBetweenRandomSwaps);
+        } while (randomSwappingTime > 0);
     }
 
     private void SwapRandomTiles()

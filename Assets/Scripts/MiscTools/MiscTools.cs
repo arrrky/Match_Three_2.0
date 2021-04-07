@@ -1,9 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class MiscTools 
+public static class MiscTools 
 {
+    private static Array tileTypeEnumValues = Enum.GetValues(typeof(TileType));
+
     /// <summary>
     /// По сути возвращает Vector3 координаты правого верхнего угла.
     /// Но учитывая, что центр экрана в нулевых координатах, дает представление о размере сцены в целом.
@@ -33,4 +37,10 @@ public class MiscTools
         Vector3 spriteBoundsExtents = sprite.bounds.extents;
         return new Vector2(spriteBoundsExtents.x, spriteBoundsExtents.y);
     }    
+    
+    public static TileType GetRandomTypeOfTile()
+    {
+        TileType randomTileType = (TileType)tileTypeEnumValues.GetValue(Random.Range(1, tileTypeEnumValues.Length));
+        return randomTileType;
+    }
 }

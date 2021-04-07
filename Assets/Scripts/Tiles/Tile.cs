@@ -8,10 +8,16 @@ using Zenject;
 public class Tile : MonoBehaviour
 {
    private PlayingFieldManager playingFieldManager;
-  
+
+   /// <summary>
+   /// Row, column
+   /// </summary>
+   public Vector2Int tileIndex;
+   public TileType tileType;
+
    public Light tileBacklight;
    public static Tile SelectedTile;
-   public TileType tileType;
+  
 
    [Inject]
    private void Construct(PlayingFieldManager playingFieldManager)
@@ -28,8 +34,7 @@ public class Tile : MonoBehaviour
    {
       tileBacklight = GetComponent<Light>();
    }
-   
-   
+
    private void OnMouseDown()
    {
       SelectTile();
