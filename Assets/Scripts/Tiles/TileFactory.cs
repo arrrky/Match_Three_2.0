@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class TileFactory : MonoBehaviour
@@ -20,7 +19,7 @@ public class TileFactory : MonoBehaviour
         Sprite tileSprite = tilesSprites.Find(sprite => sprite.name == tileType.ToString().ToLower());
         tileGameObject.GetComponent<SpriteRenderer>().sprite = tileSprite;
 
-        tileGameObject.GetComponent<Tile>().tileType = tileType; //TODO - убрать, если не понадобится
+        tileGameObject.GetComponent<Tile>().TileType = tileType; //TODO - убрать, если не понадобится
 
         return tileGameObject;
     }

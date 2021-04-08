@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
-using Random = UnityEngine.Random;
 
 public class TileSpawner : MonoBehaviour
 {

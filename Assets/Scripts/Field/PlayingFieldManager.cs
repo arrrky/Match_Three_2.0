@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections;
+﻿using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -69,8 +65,8 @@ public class PlayingFieldManager : MonoBehaviour
                     Instantiate(tile, pointToInstantiateTile, quaternion.identity, gameObject.transform)
                         .GetComponent<Tile>();
                 
-                playingField[rowNumber, columnNumber].tileIndex = new Vector2Int(rowNumber, columnNumber);
-                playingField[rowNumber, columnNumber].tileType = randomTileType;
+                playingField[rowNumber, columnNumber].TileIndex = new TileIndex(rowNumber, columnNumber);
+                playingField[rowNumber, columnNumber].TileType = randomTileType;
                 
                 pointToInstantiateTile.x += distanceBetweenTiles;
             }
@@ -99,7 +95,7 @@ public class PlayingFieldManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            StartCoroutine(SwapRandomTilesRoutine());
+            //StartCoroutine(SwapRandomTilesRoutine());
 
             foreach (var tile in playingField)
             {
