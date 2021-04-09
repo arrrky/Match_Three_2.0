@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MyEventsArgs : EventArgs
+public class MyEventArgs : EventArgs
 {
     public string clipName;
 }

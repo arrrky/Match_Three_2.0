@@ -24,27 +24,27 @@ public class GameEvents : MonoBehaviour
     
     #endregion
 
-    public event EventHandler<MyEventsArgs> TileClicked;
+    public event EventHandler<MyEventArgs> TileClicked;
 
     public void OnTileClicked()
     {
-        MyEventsArgs args = new MyEventsArgs {clipName = "click"};
+        MyEventArgs args = new MyEventArgs {clipName = "click"};
         TileClicked?.Invoke(this, args);
     }
     
-    public event EventHandler<MyEventsArgs> WrongTileClicked;
+    public event EventHandler<MyEventArgs> WrongTileClicked;
     
     public void OnWrongTileClicked()
     {
-        MyEventsArgs args = new MyEventsArgs {clipName = "wrong_move"};
+        MyEventArgs args = new MyEventArgs {clipName = "wrong_move"};
         TileClicked?.Invoke(this, args);
     }
     
-    public event EventHandler<MyEventsArgs> TilesSwapped;
+    public event EventHandler<MyEventArgs> TilesSwapped;
     
     public void OnTilesSwapped()
     {
-        MyEventsArgs args = new MyEventsArgs {clipName = "swap"};
+        MyEventArgs args = new MyEventArgs {clipName = "swap"};
         TileClicked?.Invoke(this, args);
     }
 

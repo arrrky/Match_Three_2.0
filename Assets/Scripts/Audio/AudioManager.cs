@@ -11,7 +11,19 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
+       Init();
+    }
+
+    #region Init
+
+    private void Init()
+    {
         SoundDicInit();
+        SubscribeEvents();
+    }
+    
+    private void SubscribeEvents()
+    {
         GameEvents.Instance.TileClicked += PlaySound;
         GameEvents.Instance.WrongTileClicked += PlaySound;
         GameEvents.Instance.TilesSwapped += PlaySound;
@@ -25,7 +37,9 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    private void PlaySound(object sender, MyEventsArgs args)
+    #endregion
+
+    private void PlaySound(object sender, MyEventArgs args)
     {
         audioSource.clip = soundsDic[args.clipName];
         audioSource.Play();
