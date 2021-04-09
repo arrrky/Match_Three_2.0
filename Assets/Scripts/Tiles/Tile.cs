@@ -54,9 +54,11 @@ public class Tile : MonoBehaviour
          //TODO - проверка на допустимость свапа
          if (!IsSwapCorrect())
          {
+            GameEvents.Instance.OnWrongTileClicked();
             return;
          }
          
+         GameEvents.Instance.OnTilesSwapped();
          SwapTilesIndexes(this, selectedTile);
          playingFieldManager.SwapTiles(this, selectedTile);
          
@@ -67,6 +69,8 @@ public class Tile : MonoBehaviour
          return;
       }
       
+      GameEvents.Instance.OnTileClicked();
+
       selectedTile = selectedTile == this ? null : this;
       tileBacklight.enabled = selectedTile == this;
    }
