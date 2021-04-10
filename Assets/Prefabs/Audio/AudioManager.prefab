@@ -49,6 +49,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f4890ec1c880d7647a4457e9145426aa, type: 3}
   - {fileID: 8300000, guid: be984098f4f180747a46d240a26ad021, type: 3}
   - {fileID: 8300000, guid: 5e89acefb4ab6a7418a9dedf56696fe8, type: 3}
+  soundsDictionary:
+    keys: 
+    values: []
 --- !u!82 &7584939378736627165
 AudioSource:
   m_ObjectHideFlags: 0

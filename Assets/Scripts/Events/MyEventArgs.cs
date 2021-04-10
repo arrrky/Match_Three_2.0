@@ -5,5 +5,5 @@ using UnityEngine;
 
 public class MyEventArgs : EventArgs
 {
-    public string clipName;
+    public SoundType soundType;
 }

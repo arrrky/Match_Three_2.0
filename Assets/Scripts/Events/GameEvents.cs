@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 
 public class GameEvents : MonoBehaviour
@@ -28,7 +25,7 @@ public class GameEvents : MonoBehaviour
 
     public void OnTileClicked()
     {
-        MyEventArgs args = new MyEventArgs {clipName = "click"};
+        MyEventArgs args = new MyEventArgs {soundType = SoundType.Click};
         TileClicked?.Invoke(this, args);
     }
     
@@ -36,7 +33,7 @@ public class GameEvents : MonoBehaviour
     
     public void OnWrongTileClicked()
     {
-        MyEventArgs args = new MyEventArgs {clipName = "wrong_move"};
+        MyEventArgs args = new MyEventArgs {soundType = SoundType.WrongMove};
         TileClicked?.Invoke(this, args);
     }
     
@@ -44,8 +41,7 @@ public class GameEvents : MonoBehaviour
     
     public void OnTilesSwapped()
     {
-        MyEventArgs args = new MyEventArgs {clipName = "swap"};
+        MyEventArgs args = new MyEventArgs {soundType = SoundType.Swap};
         TileClicked?.Invoke(this, args);
     }
-
 }

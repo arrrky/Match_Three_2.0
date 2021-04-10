@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
+﻿using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private List<AudioClip> soundsList = new List<AudioClip>();
+    [SerializeField] private SoundsDictionary sounds = new SoundsDictionary();
 
-    private Dictionary<string, AudioClip> soundsDic = new Dictionary<string, AudioClip>();
-
-    private void Start()
+   private void Start()
     {
        Init();
     }
@@ -18,36 +14,27 @@ public class AudioManager : MonoBehaviour
 
     private void Init()
     {
-        SoundDicInit();
-        SubscribeEvents();
+        SubscribeOnEvents();
     }
     
-    private void SubscribeEvents()
+    private void SubscribeOnEvents()
     {
         GameEvents.Instance.TileClicked += PlaySound;
         GameEvents.Instance.WrongTileClicked += PlaySound;
         GameEvents.Instance.TilesSwapped += PlaySound;
     }
 
-    private void SoundDicInit()
-    {
-        foreach (AudioClip sound in soundsList)
-        {
-            soundsDic.Add(sound.name, sound);
-        }
-    }
-
     #endregion
 
     private void PlaySound(object sender, MyEventArgs args)
     {
-        audioSource.clip = soundsDic[args.clipName];
+        audioSource.clip = sounds[args.soundType];
         audioSource.Play();
     }
 
-    public void PlaySound(string clipName)
+    public void PlaySound(SoundType soundType)
     {
-        audioSource.clip = soundsDic[clipName];
+        audioSource.clip = sounds[soundType];
         audioSource.Play();
     }
 
