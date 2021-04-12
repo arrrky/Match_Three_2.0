@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5800846598201312938}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.61100197, y: -5.944979, z: -0.30042875}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -45,13 +45,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 7584939378736627165}
-  soundsList:
-  - {fileID: 8300000, guid: f4890ec1c880d7647a4457e9145426aa, type: 3}
-  - {fileID: 8300000, guid: be984098f4f180747a46d240a26ad021, type: 3}
-  - {fileID: 8300000, guid: 5e89acefb4ab6a7418a9dedf56696fe8, type: 3}
-  soundsDictionary:
-    keys: 
-    values: []
+  sounds:
+    _Buckets: 020000000000000001000000
+    _HashCodes: 010000000200000003000000
+    _Next: ffffffffffffffffffffffff
+    _Count: 3
+    _Version: 12
+    _FreeList: -1
+    _FreeCount: 0
+    _Keys: 010000000200000003000000
+    _Values:
+    - {fileID: 8300000, guid: f4890ec1c880d7647a4457e9145426aa, type: 3}
+    - {fileID: 8300000, guid: be984098f4f180747a46d240a26ad021, type: 3}
+    - {fileID: 8300000, guid: 5e89acefb4ab6a7418a9dedf56696fe8, type: 3}
 --- !u!82 &7584939378736627165
 AudioSource:
   m_ObjectHideFlags: 0

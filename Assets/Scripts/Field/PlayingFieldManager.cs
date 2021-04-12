@@ -22,6 +22,10 @@ public class PlayingFieldManager : MonoBehaviour
 
     private Tile[,] playingField;
 
+    [SerializeField]
+    private float swapSpeed = 5f;
+    private bool IsSwapping;
+
     private const float TimeBetweenRandomSwaps = 0.01f;
 
     [Inject]
@@ -48,9 +52,9 @@ public class PlayingFieldManager : MonoBehaviour
 
     private void FillPlayingField()
     {
-        IPlayingFieldGenerator playingFieldGenerator = new PlayingFieldGenerator(rowsCount,columnsCount);
+        IPlayingFieldGenerator playingFieldGenerator = new PlayingFieldGenerator(rowsCount, columnsCount);
         TileType[,] randomPlayingField = playingFieldGenerator.GetRandomPlayingField();
-        
+
         Vector3 pointToInstantiateTile =
             new Vector3(topLeftPointOfPlayingField.x, topLeftPointOfPlayingField.y - spriteShift.y, 0);
 
@@ -64,10 +68,10 @@ public class PlayingFieldManager : MonoBehaviour
                 playingField[rowNumber, columnNumber] =
                     Instantiate(tile, pointToInstantiateTile, quaternion.identity, gameObject.transform)
                         .GetComponent<Tile>();
-                
+
                 playingField[rowNumber, columnNumber].TileIndex = new TileIndex(rowNumber, columnNumber);
                 playingField[rowNumber, columnNumber].TileType = randomTileType;
-                
+
                 pointToInstantiateTile.x += distanceBetweenTiles;
             }
 
@@ -78,9 +82,39 @@ public class PlayingFieldManager : MonoBehaviour
 
     public void SwapTiles(Tile tile0, Tile tile1)
     {
-        Vector3 tempTransformPosition = tile0.gameObject.transform.position;
-        tile0.gameObject.transform.position = tile1.gameObject.transform.position;
-        tile1.gameObject.transform.position = tempTransformPosition;
+        if (IsSwapping)
+        {
+            GameEvents.Instance.OnWrongTileClicked();
+            return;
+        }
+        
+        StartCoroutine(SwapTilesAnimation(tile0, tile1));
+    }
+
+    private IEnumerator SwapTilesAnimation(Tile tile0, Tile tile1)
+    {
+        IsSwapping = true;
+        
+       Vector3 tile0Position = tile0.gameObject.transform.position;
+       Vector3 tile1Position = tile1.gameObject.transform.position;
+
+       float currentTimeOfSwapping = 0f;
+       float distanceBetweenTiles = Vector3.Distance(tile0Position, tile1Position); //чтобы скорость свапа зависела от расстояния между плитками
+
+       while (tile0.gameObject.transform.position != tile1Position)
+       {
+           currentTimeOfSwapping += Time.deltaTime;
+           
+           tile0.gameObject.transform.position = 
+               Vector3.MoveTowards(tile0Position, tile1Position, (currentTimeOfSwapping * swapSpeed * distanceBetweenTiles));
+           
+           tile1.gameObject.transform.position = 
+               Vector3.MoveTowards(tile1Position, tile0Position, (currentTimeOfSwapping * swapSpeed * distanceBetweenTiles));
+           
+           yield return new WaitForEndOfFrame();
+       }
+
+       IsSwapping = false;
     }
 
     // TODO - удалить, для тестов
@@ -101,7 +135,7 @@ public class PlayingFieldManager : MonoBehaviour
             {
                 Destroy(tile.gameObject);
             }
-            
+
             FillPlayingField();
         }
     }
