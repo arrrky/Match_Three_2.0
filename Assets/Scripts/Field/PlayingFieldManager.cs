@@ -88,7 +88,23 @@ public class PlayingFieldManager : MonoBehaviour
             return;
         }
         
+        SwapTilesIndexes(tile0, tile1);
+        SwapTilesInArray(tile0, tile1);
+
         StartCoroutine(SwapTilesAnimation(tile0, tile1));
+    }
+
+    private void SwapTilesIndexes(Tile tile0, Tile tile1)
+    {
+        TileIndex tempIndex = tile0.TileIndex;
+        tile0.TileIndex = tile1.TileIndex;
+        tile1.TileIndex = tempIndex;
+    }
+    
+    private void SwapTilesInArray(Tile tile0, Tile tile1)
+    {
+        playingField[tile0.TileIndex.Row, tile0.TileIndex.Column] = tile0;
+        playingField[tile1.TileIndex.Row, tile1.TileIndex.Column] = tile1;
     }
 
     private IEnumerator SwapTilesAnimation(Tile tile0, Tile tile1)
@@ -117,6 +133,21 @@ public class PlayingFieldManager : MonoBehaviour
        IsSwapping = false;
     }
 
+    //TODO
+    private bool IsMatch()
+    {
+        return true;
+    }
+
+    private void PrintTilesTypes()
+    {
+        foreach (var tile in playingField)
+        {
+            Debug.Log($"Tile type: {tile.TileType}");
+        }
+    }
+    
+
     // TODO - удалить, для тестов
     private void Update()
     {
@@ -137,6 +168,11 @@ public class PlayingFieldManager : MonoBehaviour
             }
 
             FillPlayingField();
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            PrintTilesTypes();
         }
     }
 

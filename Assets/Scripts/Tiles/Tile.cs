@@ -59,7 +59,7 @@ public class Tile : MonoBehaviour
          }
          
          GameEvents.Instance.OnTilesSwapped();
-         SwapTilesIndexes(this, selectedTile);
+         
          playingFieldManager.SwapTiles(this, selectedTile);
          
          this.tileBacklight.enabled = false;
@@ -73,13 +73,6 @@ public class Tile : MonoBehaviour
 
       selectedTile = selectedTile == this ? null : this;
       tileBacklight.enabled = selectedTile == this;
-   }
-
-   private void SwapTilesIndexes(Tile tile0, Tile tile1)
-   {
-      TileIndex tempIndex = tile0.TileIndex;
-      tile0.TileIndex = tile1.TileIndex;
-      tile1.TileIndex = tempIndex;
    }
 
    // Разрешаем свап, только если плитки в одном ряду или в одном столбце
