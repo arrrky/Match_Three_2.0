@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using ModestTree;
 using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
@@ -14,6 +16,7 @@ public class PlayingFieldManager : MonoBehaviour
 
     private int rowsCount = 10;
     private int columnsCount = 10;
+    private int matchesCount = 3;
 
     private Vector3 topLeftPointOfPlayingField;
     private Vector3 screenBounds;
@@ -136,8 +139,81 @@ public class PlayingFieldManager : MonoBehaviour
     //TODO
     private bool IsMatch()
     {
+        
+        
+        
         return true;
     }
+
+    private void CheckForMatch()
+    {
+        HashSet<Tile> tilesToDelete = new HashSet<Tile>();
+
+        // Проходим слева-направо сверху-вниз. Ищем совпадения в рядах. 
+        for (int rowNumber = 0; rowNumber < rowsCount; rowNumber++) // 
+        {
+            int matchedTilesInARow = 1; // количество совпавших плиток подряд
+            
+            for (int columnNumber = 1; columnNumber < columnsCount; columnNumber++)
+            {
+                if (playingField[rowNumber, columnNumber].TileType ==
+                    playingField[rowNumber, columnNumber - 1].TileType)
+                {
+                    matchedTilesInARow++;
+                    
+                    if (matchedTilesInARow >= matchesCount)
+                    {
+                        for (int shift = 0; shift < matchedTilesInARow; shift++)
+                        {
+                            tilesToDelete.Add(playingField[rowNumber, columnNumber - shift]);
+                        }
+                    }
+                }
+                else
+                {
+                    matchedTilesInARow = 1;
+                }
+            }
+        }
+       
+        // Проходим сверху-вниз слева-направо. Ищем совпадения в  столбцах. 
+        for (int columnNumber = 0; columnNumber < columnsCount; columnNumber++) // 
+        {
+            int matchedTilesInARow = 1; // количество совпавших плиток подряд
+            
+            for (int rowNumber = 1; rowNumber < rowsCount; rowNumber++)
+            {
+                if (playingField[rowNumber, columnNumber].TileType ==
+                    playingField[rowNumber - 1, columnNumber].TileType)
+                {
+                    matchedTilesInARow++;
+                    
+                    if (matchedTilesInARow >= matchesCount)
+                    {
+                        for (int shift = 0; shift < matchedTilesInARow; shift++)
+                        {
+                            tilesToDelete.Add(playingField[rowNumber - shift, columnNumber]);
+                        }
+                    }
+                }
+                else
+                {
+                    matchedTilesInARow = 1;
+                }
+            }
+        }
+
+        foreach (var tile in tilesToDelete)
+        {
+            Debug.Log($"Index of tiles to delete: {tile.TileIndex.Row} - {tile.TileIndex.Column}");
+        }
+
+        if (tilesToDelete.IsEmpty())
+        {
+            Debug.Log("No matches");
+        }
+    }
+
 
     private void PrintTilesTypes()
     {
@@ -173,6 +249,11 @@ public class PlayingFieldManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             PrintTilesTypes();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+           CheckForMatch();
         }
     }
 
