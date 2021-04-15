@@ -3,7 +3,7 @@ using Zenject;
 
 public class Tile : MonoBehaviour
 {
-   private PlayingFieldManager playingFieldManager;
+   private PlayingFieldManager _playingFieldManager;
 
    private TileIndex tileIndex;
    private TileType tileType;
@@ -29,7 +29,7 @@ public class Tile : MonoBehaviour
    [Inject]
    private void Construct(PlayingFieldManager playingFieldManager)
    {
-      this.playingFieldManager = playingFieldManager;
+      this._playingFieldManager = playingFieldManager;
    }
    
    private void Awake()
@@ -60,7 +60,7 @@ public class Tile : MonoBehaviour
          
          GameEvents.Instance.OnTilesSwapped();
          
-         playingFieldManager.SwapTiles(this, selectedTile);
+         _playingFieldManager.SwapTiles(this, selectedTile);
          
          this.tileBacklight.enabled = false;
          selectedTile.tileBacklight.enabled = false;

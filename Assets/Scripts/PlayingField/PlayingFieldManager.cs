@@ -25,8 +25,7 @@ public class PlayingFieldManager : MonoBehaviour
 
     private Tile[,] playingField;
 
-    [SerializeField]
-    private float swapSpeed = 5f;
+    [SerializeField] private float swapSpeed = 5f;
     private bool IsSwapping;
 
     private const float TimeBetweenRandomSwaps = 0.01f;
@@ -90,11 +89,10 @@ public class PlayingFieldManager : MonoBehaviour
             GameEvents.Instance.OnWrongTileClicked();
             return;
         }
-        
+
         SwapTilesIndexes(tile0, tile1);
         SwapTilesInArray(tile0, tile1);
-
-        StartCoroutine(SwapTilesAnimation(tile0, tile1));
+        SwapTilesAnimation(tile0, tile1);
     }
 
     private void SwapTilesIndexes(Tile tile0, Tile tile1)
@@ -103,49 +101,74 @@ public class PlayingFieldManager : MonoBehaviour
         tile0.TileIndex = tile1.TileIndex;
         tile1.TileIndex = tempIndex;
     }
-    
+
     private void SwapTilesInArray(Tile tile0, Tile tile1)
     {
         playingField[tile0.TileIndex.Row, tile0.TileIndex.Column] = tile0;
         playingField[tile1.TileIndex.Row, tile1.TileIndex.Column] = tile1;
     }
 
-    private IEnumerator SwapTilesAnimation(Tile tile0, Tile tile1)
+    //TODO - посмотреть можно ли избежать дублирования кода?
+    private void SwapTilesAnimation(Tile tile0, Tile tile1)
+    {
+        TileMover tile0Mover = tile0.GetComponent<TileMover>();
+        TileMover tile1Mover = tile1.GetComponent<TileMover>();
+
+        Vector3 tile0Position = tile0.gameObject.transform.position;
+        Vector3 tile1Position = tile1.gameObject.transform.position;
+
+        float distanceBetweenTiles = Vector3.Distance(tile0Position, tile1Position); //чтобы скорость свапа зависела от расстояния между плитками
+
+        tile0Mover.DestinationPoint = tile1Position;
+        tile1Mover.DestinationPoint = tile0Position;
+
+        tile0Mover.MovingSpeed *= distanceBetweenTiles;
+        tile1Mover.MovingSpeed *= distanceBetweenTiles;
+
+        tile0Mover.IsMoving = true;
+        tile1Mover.IsMoving = true;
+
+        tile0Mover.enabled = true;
+        tile1Mover.enabled = true;
+    }
+
+    /*private IEnumerator SwapTilesAnimation(Tile tile0, Tile tile1)
     {
         IsSwapping = true;
-        
-       Vector3 tile0Position = tile0.gameObject.transform.position;
-       Vector3 tile1Position = tile1.gameObject.transform.position;
 
-       float currentTimeOfSwapping = 0f;
-       float distanceBetweenTiles = Vector3.Distance(tile0Position, tile1Position); //чтобы скорость свапа зависела от расстояния между плитками
+        Vector3 tile0Position = tile0.gameObject.transform.position;
+        Vector3 tile1Position = tile1.gameObject.transform.position;
 
-       while (tile0.gameObject.transform.position != tile1Position)
-       {
-           currentTimeOfSwapping += Time.deltaTime;
-           
-           tile0.gameObject.transform.position = 
-               Vector3.MoveTowards(tile0Position, tile1Position, (currentTimeOfSwapping * swapSpeed * distanceBetweenTiles));
-           
-           tile1.gameObject.transform.position = 
-               Vector3.MoveTowards(tile1Position, tile0Position, (currentTimeOfSwapping * swapSpeed * distanceBetweenTiles));
-           
-           yield return new WaitForEndOfFrame();
-       }
+        float currentTimeOfSwapping = 0f;
+        float distanceBetweenTiles =
+            Vector3.Distance(tile0Position, tile1Position); //чтобы скорость свапа зависела от расстояния между плитками
 
-       IsSwapping = false;
-    }
+        while (tile0.gameObject.transform.position != tile1Position)
+        {
+            currentTimeOfSwapping += Time.deltaTime;
+
+            tile0.gameObject.transform.position =
+                Vector3.MoveTowards(tile0Position, tile1Position,
+                    (currentTimeOfSwapping * swapSpeed * distanceBetweenTiles));
+
+            tile1.gameObject.transform.position =
+                Vector3.MoveTowards(tile1Position, tile0Position,
+                    (currentTimeOfSwapping * swapSpeed * distanceBetweenTiles));
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        IsSwapping = false;
+    }*/
 
     //TODO
     private bool IsMatch()
     {
-        
-        
-        
         return true;
     }
 
-    private void CheckForMatch()
+    // Возвращает список совпавших плиток, если он пустой - совпадений нет
+    private HashSet<Tile> GetMatchedTiles()
     {
         HashSet<Tile> tilesToDelete = new HashSet<Tile>();
 
@@ -153,14 +176,14 @@ public class PlayingFieldManager : MonoBehaviour
         for (int rowNumber = 0; rowNumber < rowsCount; rowNumber++) // 
         {
             int matchedTilesInARow = 1; // количество совпавших плиток подряд
-            
+
             for (int columnNumber = 1; columnNumber < columnsCount; columnNumber++)
             {
                 if (playingField[rowNumber, columnNumber].TileType ==
                     playingField[rowNumber, columnNumber - 1].TileType)
                 {
                     matchedTilesInARow++;
-                    
+
                     if (matchedTilesInARow >= matchesCount)
                     {
                         for (int shift = 0; shift < matchedTilesInARow; shift++)
@@ -175,19 +198,19 @@ public class PlayingFieldManager : MonoBehaviour
                 }
             }
         }
-       
+
         // Проходим сверху-вниз слева-направо. Ищем совпадения в  столбцах. 
         for (int columnNumber = 0; columnNumber < columnsCount; columnNumber++) // 
         {
             int matchedTilesInARow = 1; // количество совпавших плиток подряд
-            
+
             for (int rowNumber = 1; rowNumber < rowsCount; rowNumber++)
             {
                 if (playingField[rowNumber, columnNumber].TileType ==
                     playingField[rowNumber - 1, columnNumber].TileType)
                 {
                     matchedTilesInARow++;
-                    
+
                     if (matchedTilesInARow >= matchesCount)
                     {
                         for (int shift = 0; shift < matchedTilesInARow; shift++)
@@ -212,19 +235,12 @@ public class PlayingFieldManager : MonoBehaviour
         {
             Debug.Log("No matches");
         }
+
+        return tilesToDelete;
     }
 
-
-    private void PrintTilesTypes()
-    {
-        foreach (var tile in playingField)
-        {
-            Debug.Log($"Tile type: {tile.TileType}");
-        }
-    }
+#if UNITY_EDITOR
     
-
-    // TODO - удалить, для тестов
     private void Update()
     {
         //SwapRandomTiles(); можно использовать как заставку -  красиво
@@ -250,10 +266,10 @@ public class PlayingFieldManager : MonoBehaviour
         {
             PrintTilesTypes();
         }
-        
+
         if (Input.GetKeyDown(KeyCode.C))
         {
-           CheckForMatch();
+            GetMatchedTiles();
         }
     }
 
@@ -284,4 +300,14 @@ public class PlayingFieldManager : MonoBehaviour
     {
         return new Vector2Int(Random.Range(0, rowsCount), Random.Range(0, columnsCount));
     }
+
+    private void PrintTilesTypes()
+    {
+        foreach (var tile in playingField)
+        {
+            Debug.Log($"Tile type: {tile.TileType}");
+        }
+    }
+    
+#endif
 }
