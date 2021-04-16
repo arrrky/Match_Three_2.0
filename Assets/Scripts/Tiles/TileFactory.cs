@@ -1,13 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class TileFactory : MonoBehaviour
+public class TileFactory : MonoBehaviour, ITileFactory
 {
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private TileSpritesDictionary tileSprites = new TileSpritesDictionary();
 
-    public GameObject GetTileGameObject(TileType tileType)
+    private GameObject defaultTile;
+    private Vector3 defaultTilePosition;
+
+    private void Start()
+    {
+        InstantiateDefaultTile();
+    }
+
+    // Чтобы не изменять оригинальный префаб, а брать копии с объекта на сцене
+    private void InstantiateDefaultTile()
+    {
+        Vector3 screenBounds = MiscTools.GetScreenBounds();
+        defaultTilePosition = new Vector3(screenBounds.x + 1, screenBounds.y + 1, 0);
+        defaultTile = Instantiate(tilePrefab, defaultTilePosition, quaternion.identity, gameObject.transform);
+    }
+
+    public GameObject CreateTile(TileType tileType)
     {
         GameObject tileGameObject = ConstructTile(tileType);
         return tileGameObject;
@@ -15,13 +30,13 @@ public class TileFactory : MonoBehaviour
 
     private GameObject ConstructTile(TileType tileType)
     {
-        GameObject tileGameObject = tilePrefab;
+        GameObject tileToConstruct = defaultTile;
 
         Sprite tileSprite = tileSprites[tileType];
-        tileGameObject.GetComponent<SpriteRenderer>().sprite = tileSprite;
+        tileToConstruct.GetComponent<SpriteRenderer>().sprite = tileSprite;
 
-        tileGameObject.GetComponent<Tile>().TileType = tileType; //TODO - убрать, если не понадобится
+        tileToConstruct.GetComponent<Tile>().TileType = tileType;
 
-        return tileGameObject;
+        return tileToConstruct;
     }
 }

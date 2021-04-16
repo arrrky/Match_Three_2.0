@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -171,10 +171,3 @@ public abstract class DictionaryDrawer<TK, TV> : PropertyDrawer
         }
     }
 }
- 
-[CustomPropertyDrawer(typeof(SoundsDictionary))]
-public class MySoundDictionaryDrawer: DictionaryDrawer<SoundType, AudioClip> { }
-
-[CustomPropertyDrawer(typeof(TileSpritesDictionary))]
-public class MyTileSpritesDictionaryDrawer: DictionaryDrawer<TileType, Sprite> { }
-

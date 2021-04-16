@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿﻿using UnityEngine;
 using Zenject;
 
 public class TileSpawner : MonoBehaviour
@@ -17,13 +17,13 @@ public class TileSpawner : MonoBehaviour
 
    private void SpawnTile(TileType tileType)
    {
-      GameObject tile = tileFactory.GetTileGameObject(tileType);
+      GameObject tile = tileFactory.CreateTile(tileType);
       Instantiate(tile, gameObject.transform);
    }
 
    private void SpawnRandomTile()
    {
-      GameObject tile = tileFactory.GetTileGameObject(MiscTools.GetRandomTypeOfTile());
+      GameObject tile = tileFactory.CreateTile(MiscTools.GetRandomTypeOfTile());
       Instantiate(tile, gameObject.transform);
    }
 }

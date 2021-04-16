@@ -65,7 +65,7 @@ public class PlayingFieldManager : MonoBehaviour
             for (int columnNumber = 0; columnNumber < columnsCount; columnNumber++)
             {
                 TileType randomTileType = randomPlayingField[rowNumber, columnNumber];
-                GameObject tile = tileFactory.GetTileGameObject(randomTileType);
+                GameObject tile = tileFactory.CreateTile(randomTileType);
 
                 playingField[rowNumber, columnNumber] =
                     Instantiate(tile, pointToInstantiateTile, quaternion.identity, gameObject.transform)
