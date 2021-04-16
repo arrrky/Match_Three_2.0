@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class TileFactory : MonoBehaviour
 {
     [SerializeField] private GameObject tilePrefab;
-    [SerializeField] private List<Sprite> tilesSprites = new List<Sprite>();
+    [SerializeField] private TileSpritesDictionary tileSprites = new TileSpritesDictionary();
 
     public GameObject GetTileGameObject(TileType tileType)
     {
@@ -16,7 +17,7 @@ public class TileFactory : MonoBehaviour
     {
         GameObject tileGameObject = tilePrefab;
 
-        Sprite tileSprite = tilesSprites.Find(sprite => sprite.name == tileType.ToString().ToLower());
+        Sprite tileSprite = tileSprites[tileType];
         tileGameObject.GetComponent<SpriteRenderer>().sprite = tileSprite;
 
         tileGameObject.GetComponent<Tile>().TileType = tileType; //TODO - убрать, если не понадобится

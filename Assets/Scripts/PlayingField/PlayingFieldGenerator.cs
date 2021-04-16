@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Random = UnityEngine.Random;
 
 public class PlayingFieldGenerator : IPlayingFieldGenerator
 {
@@ -30,8 +32,8 @@ public class PlayingFieldGenerator : IPlayingFieldGenerator
 
     private TileType GetCorrectTileType(int rowNumber, int columnNumber)
     {
-        List<TileType> tileTypes = new List<TileType>
-            {TileType.Circle, TileType.Diamond, TileType.Square, TileType.Star, TileType.Triangle};
+        List<TileType> tileTypes = Enum.GetValues(typeof(TileType)).OfType<TileType>().ToList();
+        tileTypes.Remove(TileType.Default);
 
         TileType correctTileType = tileTypes[Random.Range(0, tileTypes.Count)];
 
