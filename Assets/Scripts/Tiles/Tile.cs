@@ -3,33 +3,24 @@ using Zenject;
 
 public class Tile : MonoBehaviour
 {
-   private PlayingFieldManager _playingFieldManager;
-
-   private TileIndex tileIndex;
-   private TileType tileType;
+   private PlayingFieldManager playingFieldManager;
 
    private Light tileBacklight;
+   private SpriteRenderer spriteRenderer;
    private static Tile selectedTile;
 
    #region PROPERTIES
-   public TileIndex TileIndex
-   {
-      get => tileIndex;
-      set => tileIndex = value;
-   }
 
-   public TileType TileType
-   {
-      get => tileType;
-      set => tileType = value;
-   }
+   public TileIndex TileIndex { get; set; }
+   public TileType TileType { get; set; }
+   public bool IsActive { get; set; } = true;
 
    #endregion
 
    [Inject]
    private void Construct(PlayingFieldManager playingFieldManager)
    {
-      this._playingFieldManager = playingFieldManager;
+      this.playingFieldManager = playingFieldManager;
    }
    
    private void Awake()
@@ -40,10 +31,13 @@ public class Tile : MonoBehaviour
    private void Init()
    {
       tileBacklight = GetComponent<Light>();
+      spriteRenderer = GetComponent<SpriteRenderer>();
    }
 
    private void OnMouseDown()
    {
+      Debug.Log($"Tile index: {TileIndex.Row}-{TileIndex.Column}");
+      Debug.Log($"Tile type: {TileType.ToString()}");
       SelectTile();
    }
 
@@ -60,7 +54,7 @@ public class Tile : MonoBehaviour
          
          GameEvents.Instance.OnTilesSwapped();
          
-         _playingFieldManager.SwapTiles(this, selectedTile);
+         playingFieldManager.SwapTiles(this, selectedTile);
          
          this.tileBacklight.enabled = false;
          selectedTile.tileBacklight.enabled = false;
@@ -73,6 +67,14 @@ public class Tile : MonoBehaviour
 
       selectedTile = selectedTile == this ? null : this;
       tileBacklight.enabled = selectedTile == this;
+   }
+
+   
+   // Включаем / выключаем спрайт рендерер, чтобы объект оставался на сцене, но был невидим 
+   public void SetActive(bool state)
+   {
+      IsActive = state;
+      spriteRenderer.enabled = state;
    }
 
    // Разрешаем свап, только если плитки в одном ряду или в одном столбце

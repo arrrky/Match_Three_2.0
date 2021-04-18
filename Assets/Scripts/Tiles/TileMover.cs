@@ -1,40 +1,47 @@
 ﻿using UnityEngine;
 
-public class TileMover : MonoBehaviour, IMove
+public class TileMover : MonoBehaviour
 {
-    private Vector3 destinationPoint;
-    private bool isMoving;
-    private float movingSpeed = 5;
     private float step;
+    private Vector3 destinationPoint;
+    private const float DefaultMovingSpeed = 5;
+    private float speedMultiplier;
+    private bool isMoving;
 
-    public bool IsMoving
+    public float SpeedMultiplier
     {
-        get => isMoving;
-        set => isMoving = value;
+        get => speedMultiplier;
+        set
+        {
+            if (value <= 0)
+            {
+                speedMultiplier = 1;
+            }
+            else
+            {
+                speedMultiplier = value;
+            }
+        }
     }
 
-    public Vector3 DestinationPoint
+    public void Init(Vector3 destinationPoint, float speedMultiplier)
     {
-        get => destinationPoint;
-        set => destinationPoint = value;
-    }
-
-    public float MovingSpeed
-    {
-        get => movingSpeed;
-        set => movingSpeed = value;
+        this.destinationPoint = destinationPoint;
+        SpeedMultiplier = speedMultiplier;
+        isMoving = true;
+        enabled = true;
     }
 
     void Update()
     {  
-        if (IsMoving)
+        if (isMoving)
         {
-            step = MovingSpeed * Time.deltaTime;
+            step = DefaultMovingSpeed * SpeedMultiplier * Time.deltaTime;
             Move();
         }
     }
 
-    public void Move()
+    private void Move()
     {
         gameObject.transform.position =
             Vector3.MoveTowards(gameObject.transform.position, destinationPoint, step);

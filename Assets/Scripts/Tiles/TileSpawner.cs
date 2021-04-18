@@ -10,10 +10,6 @@ public class TileSpawner : MonoBehaviour
    {
       this.tileFactory = tileFactory;
    }
-   
-   private void Awake()
-   {
-   }
 
    private void SpawnTile(TileType tileType)
    {

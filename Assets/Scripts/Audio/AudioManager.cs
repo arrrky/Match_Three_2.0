@@ -14,10 +14,10 @@ public class AudioManager : MonoBehaviour
 
     private void Init()
     {
-        SubscribeOnEvents();
+        Subscribe();
     }
     
-    private void SubscribeOnEvents()
+    private void Subscribe()
     {
         GameEvents.Instance.TileClicked += PlaySound;
         GameEvents.Instance.WrongTileClicked += PlaySound;
